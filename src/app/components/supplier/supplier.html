@@ -1,0 +1,168 @@
+
+<div class="page-header">
+  <div>
+    <h1>Supplier Management</h1>
+    <p>Manage your suppliers, contact details and company information.</p>
+  </div>
+
+  <button mat-flat-button color="primary" (click)="addSupplier()">
+    <mat-icon>add</mat-icon>
+    Add Supplier
+  </button>
+</div>
+
+<div class="toolbar">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search suppliers</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Name, company, email, phone or city">
+    <button
+      *ngIf="searchText"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear search"
+      (click)="searchText = ''; onSearchChange()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<div *ngIf="loading" class="message">
+  Loading suppliers...
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+  <button mat-button color="primary" (click)="loadSuppliers()">
+    Retry
+  </button>
+</div>
+
+<div *ngIf="!loading && !errorMessage" class="table-container">
+  <table mat-table [dataSource]="pagedSuppliers" class="supplier-table">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="company">
+      <th mat-header-cell *matHeaderCellDef>Company</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.company }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Phone</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.phone }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef>City</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.city }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let supplier">
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Edit supplier"
+          (click)="editSupplier(supplier)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="warn"
+          aria-label="Delete supplier"
+          (click)="deleteSupplier(supplier)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr *matNoDataRow>
+      <td [attr.colspan]="displayedColumns.length" class="empty-message">
+        No suppliers found.
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [length]="filteredSuppliers.length"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>
+
+<div *ngIf="showForm" class="form-panel">
+  <h2>{{ isEditing ? 'Edit Supplier' : 'Add Supplier' }}</h2>
+
+  <form #supplierForm="ngForm" (ngSubmit)="saveSupplier()">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Supplier Name</mat-label>
+        <input matInput name="name" [(ngModel)]="formSupplier.name" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Company</mat-label>
+        <input matInput name="company" [(ngModel)]="formSupplier.company" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          name="email"
+          [(ngModel)]="formSupplier.email"
+          email
+          required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput name="phone" [(ngModel)]="formSupplier.phone" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput name="city" [(ngModel)]="formSupplier.city" required>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-button type="button" (click)="cancelForm()">Cancel</button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="supplierForm.invalid">
+        {{ isEditing ? 'Update Supplier' : 'Save Supplier' }}
+      </button>
+    </div>
+  </form>
+</div>

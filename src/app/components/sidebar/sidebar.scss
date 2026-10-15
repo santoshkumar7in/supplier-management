@@ -1,0 +1,36 @@
+
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  padding: 16px 8px;
+  box-sizing: border-box;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  color: #333;
+  text-decoration: none;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: #e8efff;
+  color: #174ea6;
+}
+
+.sidebar mat-icon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    width: 150px;
+  }
+}

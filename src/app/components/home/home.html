@@ -1,0 +1,84 @@
+
+<h1>Welcome to Supplier Management</h1>
+
+<p class="welcome-text">
+  Manage your suppliers, products and purchase orders from one place.
+</p>
+
+<div class="dashboard-cards">
+
+  <!-- Suppliers -->
+  <mat-card
+    class="clickable-card"
+    routerLink="/suppliers"
+    tabindex="0"
+    aria-label="Open Suppliers"
+  >
+    <div class="card-heading">
+      <mat-card-title>Total Suppliers</mat-card-title>
+      <mat-icon>people</mat-icon>
+    </div>
+
+    <mat-card-content>
+      <h2 class="metric-value">{{ totalSuppliers }}</h2>
+      <p>Manage your suppliers.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Products -->
+  <mat-card
+    class="clickable-card"
+    routerLink="/products"
+    tabindex="0"
+    aria-label="Open Products"
+  >
+    <div class="card-heading">
+      <mat-card-title>Total Products</mat-card-title>
+      <mat-icon>inventory_2</mat-icon>
+    </div>
+
+    <mat-card-content>
+      <h2 class="metric-value">{{ totalProducts }}</h2>
+      <p>Maintain your product catalogue.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Purchase Orders -->
+  <mat-card
+    class="clickable-card"
+    routerLink="/purchase-orders"
+    tabindex="0"
+    aria-label="Open Purchase Orders"
+  >
+    <div class="card-heading">
+      <mat-card-title>Total Purchase Orders</mat-card-title>
+      <mat-icon>receipt_long</mat-icon>
+    </div>
+
+    <mat-card-content>
+      <h2 class="metric-value">{{ totalPurchaseOrders }}</h2>
+      <p>View and track your orders.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Purchase Order Value -->
+  <mat-card
+    class="clickable-card"
+    routerLink="/purchase-orders"
+    tabindex="0"
+    aria-label="View Purchase Order Value"
+  >
+    <div class="card-heading">
+      <mat-card-title>Total Order Value</mat-card-title>
+      <mat-icon>currency_rupee</mat-icon>
+    </div>
+
+    <mat-card-content>
+      <h2 class="metric-value">
+        {{ totalOrderValue | currency:'INR':'symbol':'1.2-2' }}
+      </h2>
+      <p>Combined value of all purchase orders.</p>
+    </mat-card-content>
+  </mat-card>
+
+</div>

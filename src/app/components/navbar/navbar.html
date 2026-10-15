@@ -1,0 +1,25 @@
+
+<mat-toolbar color="primary" class="top-navbar">
+  <button mat-icon-button aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span class="app-title">Supplier Management</span>
+
+  <span class="spacer"></span>
+
+  <button mat-button type="button" aria-label="Administrator">
+    <mat-icon>account_circle</mat-icon>
+    Admin
+  </button>
+
+  <button
+    mat-button
+    type="button"
+    (click)="logout()"
+    aria-label="Logout"
+  >
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-toolbar>

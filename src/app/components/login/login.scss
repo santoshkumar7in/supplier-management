@@ -1,0 +1,48 @@
+
+.login-container {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: 12px;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-button {
+  height: 46px;
+  margin-top: 8px;
+}
+
+.error-message {
+  color: #c62828;
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+
+.login-footer {
+  padding: 16px 0 0;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}

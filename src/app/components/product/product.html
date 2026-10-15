@@ -1,0 +1,201 @@
+
+<div class="page-header">
+  <div>
+    <h1>Product Management</h1>
+    <p>Manage your product catalogue, pricing and stock quantities.</p>
+  </div>
+
+  <button mat-flat-button color="primary" (click)="addProduct()">
+    <mat-icon>add</mat-icon>
+    Add Product
+  </button>
+</div>
+
+<div class="toolbar">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search products</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+
+    <input
+      matInput
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Search name, category, price or description">
+
+    <button
+      *ngIf="searchText"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear search"
+      (click)="searchText = ''; onSearchChange()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<div *ngIf="loading" class="message">
+  Loading products...
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+  <button mat-button color="primary" (click)="loadProducts()">
+    Retry
+  </button>
+</div>
+
+<div *ngIf="!loading && !errorMessage" class="table-container">
+  <table mat-table [dataSource]="pagedProducts" class="product-table">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Product Name</th>
+      <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Category</th>
+      <td mat-cell *matCellDef="let product">{{ product.category }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.price | currency:'INR':'symbol':'1.2-2' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Stock</th>
+      <td mat-cell *matCellDef="let product">{{ product.quantity }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell *matCellDef="let product" class="description-cell">
+        {{ product.description }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let product">
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Edit product"
+          (click)="editProduct(product)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="warn"
+          aria-label="Delete product"
+          (click)="deleteProduct(product)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr *matNoDataRow>
+      <td [attr.colspan]="displayedColumns.length" class="empty-message">
+        No products found.
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [length]="filteredProducts.length"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>
+
+<div *ngIf="showForm" class="form-panel">
+  <h2>{{ isEditing ? 'Edit Product' : 'Add Product' }}</h2>
+
+  <form #productForm="ngForm" (ngSubmit)="saveProduct()">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Product Name</mat-label>
+        <input
+          matInput
+          name="name"
+          [(ngModel)]="formProduct.name"
+          required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select
+          name="category"
+          [(ngModel)]="formProduct.category"
+          required>
+          <mat-option value="Electronics">Electronics</mat-option>
+          <mat-option value="Office">Office</mat-option>
+          <mat-option value="Accessories">Accessories</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Price (₹)</mat-label>
+        <input
+          matInput
+          type="number"
+          name="price"
+          [(ngModel)]="formProduct.price"
+          min="0"
+          step="0.01"
+          required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Stock Quantity</mat-label>
+        <input
+          matInput
+          type="number"
+          name="quantity"
+          [(ngModel)]="formProduct.quantity"
+          min="0"
+          step="1"
+          required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          name="description"
+          [(ngModel)]="formProduct.description"
+          rows="3"
+          required>
+        </textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-button type="button" (click)="cancelForm()">
+        Cancel
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="productForm.invalid">
+        {{ isEditing ? 'Update Product' : 'Save Product' }}
+      </button>
+    </div>
+  </form>
+</div>
