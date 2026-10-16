@@ -1,11 +1,8 @@
 
-<ng-container *ngIf="isLoggedIn; else loginLayout">
-  <app-navbar (menuToggle)="toggleSidebar()"></app-navbar>
+@if (isLoggedIn) {
+  <app-navbar></app-navbar>
 
-  <div
-    class="app-layout"
-    [class.sidebar-collapsed]="!sidebarExpanded"
-  >
+  <div class="app-layout">
     <app-sidebar></app-sidebar>
 
     <main class="main-content">
@@ -14,10 +11,6 @@
   </div>
 
   <app-footer></app-footer>
-</ng-container>
-
-<ng-template #loginLayout>
-  <main class="login-layout">
-    <router-outlet></router-outlet>
-  </main>
-</ng-template>
+} @else {
+  <router-outlet></router-outlet>
+}
